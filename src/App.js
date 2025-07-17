@@ -5,7 +5,7 @@ import { getFirestore, collection, doc, setDoc, getDoc, addDoc, getDocs, onSnaps
 import { Shield, Users, FileText, PlusCircle, Edit, Trash2, LogOut, Calendar, MapPin, ClipboardList, CheckSquare, XSquare, BarChart2, AlertTriangle, Download, History, UserPlus, Bell, ChevronDown, ChevronUp } from 'lucide-react';
 
 // --- CONFIGURAÇÃO DO FIREBASE ---
-const firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config) ? JSON.parse(__firebase_config) : (console.error("Firebase config não definido"), {});
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'egide-pcc-app';
 
 const app = initializeApp(firebaseConfig);
@@ -37,11 +37,7 @@ const formatMatricula = (matricula) => !matricula ? '' : matricula.toUpperCase()
 const displayMatricula = (matricula) => !matricula ? '' : matricula.padStart(8, '0').replace(/(\d{3})(\d{3})(\d{1})(\d{1})/, '$1.$2-$3-$4');
 const formatPlaca = (value) => {
     let v = value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-    if (/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/.test(v)) {
-        return v.slice(0, 3) + '-' + v.slice(3, 7);
-    } else if (v.length > 3) {
-        v = v.slice(0, 3) + '-' + v.slice(3);
-    }
+    if (v.length > 3) v = v.slice(0, 3) + '-' + v.slice(3);
     return v.slice(0, 8);
 };
 const formatTelefone = (value) => !value ? "" : value.replace(/\D/g, '').replace(/^(\d{2})(\d)/, '($1) ').replace(/(\d{5})(\d)/, '$1.$2').substring(0, 15);
@@ -254,7 +250,7 @@ function OfficerDashboard({ user, showNotification }) {
         const tempContainer = document.createElement('div');
         tempContainer.className = "fixed -left-[2000px] top-0 w-[800px] text-black bg-white p-10 font-sans";
         const allMembers = teams.map(t => t.members).flat();
-        const reportHTML = `<div id="pdf-content" class="text-sm"><h2>Relatório do Comboio</h2><p>Preencha com dados reais.</p></div>`; // PDF Generation logic to be updated with new report structure
+        const reportHTML = `<div id="pdf-content" class="text-sm">...</div>`; // PDF Generation logic to be updated with new report structure
         tempContainer.innerHTML = reportHTML;
         document.body.appendChild(tempContainer);
         html2canvas(tempContainer.querySelector('#pdf-content')).then(canvas => {
